@@ -1,5 +1,5 @@
-import type { CampaignType, GeneratedPerson, RegionProfileId, RegionVisualProfile, VisualProfile, WeightedMap } from "../types";
-import { ageGroups, cheekFullness, culturalStylingProfiles, distinctiveFeatureProfiles, eyebrowStyles, expressionProfiles, eyeShapes, eyewearProfiles, facialAsymmetryProfiles, gazeDirectionWeights, genderPresentations, hairFinishes, hairLengthProfiles, hairLengths, hairPartings, hairlineProfiles, hairstyleProfiles, headPoseWeights, jewelryProfiles, jawShapes, piercingProfiles, professionByCampaign, socioeconomicWeights, tattooProfiles, urbanRuralWeights, visibleScarProfiles } from "../data/options";
+import type { AgeGroup, CampaignType, GeneratedPerson, RegionProfileId, RegionVisualProfile, VisualProfile, WeightedMap } from "../types";
+import { ageGroups, browExpressionDetails, browRidgeProminence, canthalTilts, castingStyles, cheekboneHeights, cheekboneProminence, cheekFullness, chinShapes, culturalStylingProfiles, cupidBowDefinition, distinctiveFeatureProfiles, eyebrowDensity, eyebrowPosition, eyebrowStyles, expressionWeights, eyeShapes, eyeSizes, eyeSpacing, eyewearProfiles, facialAsymmetryWeights, facialFullness, foreheadHeights, frecklePatterns, gazeDirectionWeights, gazeIntensity, genderPresentations, hairFinishes, hairLengthProfiles, hairLengths, hairPartings, hairlineProfiles, hairstyleProfiles, headPoseWeights, jewelryProfiles, jawShapes, mouthExpressionDetails, mouthShapes, mouthWidths, neckWidths, noseBridgeWidths, noseLengths, noseTipShapes, nostrilVisibility, nostrilWidths, philtrumLengths, piercingProfiles, portraitFraming, presenceVibes, professionByCampaign, shoulderFrames, socioeconomicWeights, tattooProfiles, underEyeDetails, urbanRuralWeights, visibleBodyBuild, visibleScarProfiles } from "../data/options";
 import { regionProfiles } from "../data/regions";
 import { buildHeadshotPrompt, buildNegativePrompt } from "./promptBuilder";
 import { pickFromWeightedMap, pickRandom, pickWeighted, randomInt } from "./random";
@@ -205,44 +205,71 @@ function getFacialHair(ageGroup: string, gender: GeneratedPerson["gender_present
     switch (ageGroup) {
       case "young_adult":
         return pickFromWeightedMap({
-          clean_shaven_face: 0.46,
+          clean_shaven_face: 0.34,
           faint_mustache_shadow: 0.08,
-          light_stubble: 0.28,
-          medium_stubble: 0.10,
-          goatee: 0.04,
-          trimmed_mustache: 0.04
+          soft_natural_mustache: 0.04,
+          thin_mustache: 0.03,
+          light_stubble: 0.20,
+          medium_stubble: 0.07,
+          patchy_stubble: 0.04,
+          jawline_stubble: 0.03,
+          faint_mustache_with_light_stubble: 0.08,
+          soft_mustache_with_light_stubble: 0.05,
+          goatee: 0.02,
+          trimmed_mustache: 0.02
         });
       case "adult":
         return pickFromWeightedMap({
-          clean_shaven_face: 0.30,
-          light_stubble: 0.26,
-          medium_stubble: 0.18,
-          short_boxed_beard: 0.12,
-          goatee: 0.05,
-          trimmed_mustache: 0.05,
-          mustache_with_stubble: 0.04
+          clean_shaven_face: 0.22,
+          light_stubble: 0.18,
+          medium_stubble: 0.13,
+          heavy_stubble: 0.04,
+          faint_mustache_with_light_stubble: 0.06,
+          soft_mustache_with_light_stubble: 0.07,
+          defined_mustache_with_stubble: 0.04,
+          mustache_with_medium_stubble: 0.04,
+          short_boxed_beard: 0.08,
+          short_full_beard: 0.05,
+          scruffy_short_beard: 0.03,
+          goatee: 0.03,
+          trimmed_mustache: 0.02,
+          defined_mustache: 0.01
         });
       case "middle_aged":
         return pickFromWeightedMap({
-          clean_shaven_face: 0.24,
-          light_stubble: 0.20,
-          medium_stubble: 0.18,
-          short_boxed_beard: 0.14,
-          goatee: 0.07,
-          trimmed_mustache: 0.07,
-          mustache_with_stubble: 0.05,
-          salt_and_pepper_beard: 0.05
+          clean_shaven_face: 0.20,
+          light_stubble: 0.15,
+          medium_stubble: 0.12,
+          heavy_stubble: 0.04,
+          soft_mustache_with_light_stubble: 0.06,
+          defined_mustache_with_stubble: 0.05,
+          mustache_with_medium_stubble: 0.05,
+          short_boxed_beard: 0.10,
+          short_full_beard: 0.07,
+          scruffy_short_beard: 0.04,
+          goatee: 0.05,
+          trimmed_mustache: 0.04,
+          chevron_mustache: 0.02,
+          salt_and_pepper_beard: 0.05,
+          full_beard: 0.01
         });
       case "senior":
       case "elderly":
         return pickFromWeightedMap({
-          clean_shaven_face: 0.28,
-          light_stubble: 0.16,
-          medium_stubble: 0.12,
-          short_boxed_beard: 0.12,
-          trimmed_mustache: 0.10,
-          mustache_with_stubble: 0.08,
-          salt_and_pepper_beard: 0.14
+          clean_shaven_face: 0.24,
+          light_stubble: 0.12,
+          medium_stubble: 0.09,
+          heavy_stubble: 0.03,
+          soft_mustache_with_light_stubble: 0.05,
+          defined_mustache_with_stubble: 0.05,
+          mustache_with_medium_stubble: 0.06,
+          short_boxed_beard: 0.08,
+          short_full_beard: 0.07,
+          goatee: 0.03,
+          trimmed_mustache: 0.06,
+          chevron_mustache: 0.03,
+          salt_and_pepper_beard: 0.16,
+          full_beard: 0.03
         });
       default:
         return "clean_shaven_face";
@@ -250,32 +277,32 @@ function getFacialHair(ageGroup: string, gender: GeneratedPerson["gender_present
   }
 
   return pickFromWeightedMap({
-    clean_shaven_face: 0.74,
-    light_stubble: 0.10,
-    medium_stubble: 0.06,
+    clean_shaven_face: 0.64,
+    light_stubble: 0.09,
+    medium_stubble: 0.05,
     faint_mustache_shadow: 0.04,
+    faint_mustache_with_light_stubble: 0.04,
+    soft_mustache_with_light_stubble: 0.03,
     trimmed_mustache: 0.03,
-    goatee: 0.03
+    soft_natural_mustache: 0.03,
+    goatee: 0.03,
+    patchy_stubble: 0.02
   });
 }
 
-function getPiercings(ageGroup: string, gender: GeneratedPerson["gender_presentation"]): string[] {
+function getPiercings(ageGroup: string): string[] {
   if (ageGroup === "child") return [];
-
-  const compatible = piercingProfiles.filter(profile =>
-    isPresentationCompatible(profile.compatiblePresentations, gender)
-  );
 
   const count = ageGroup === "teen"
     ? randomInt(0, 2)
     : randomInt(0, 2);
 
-  if (count === 0 || compatible.length === 0) {
+  if (count === 0 || piercingProfiles.length === 0) {
     return [];
   }
 
   return pickDistinctWeightedIds(
-    compatible.map(profile => ({ id: profile.id, weight: profile.weight })),
+    piercingProfiles.map(profile => ({ id: profile.id, weight: profile.weight })),
     count
   );
 }
@@ -290,20 +317,16 @@ function getDistinctiveFeatures(ageGroup: string): string[] {
   return pickDistinctWeightedIds(distinctiveFeatureProfiles, count);
 }
 
-function getTattoos(ageGroup: string, gender: GeneratedPerson["gender_presentation"]): string[] {
+function getTattoos(ageGroup: string): string[] {
   if (ageGroup === "child") return [];
 
-  const compatible = tattooProfiles.filter(profile =>
-    isPresentationCompatible(profile.compatiblePresentations, gender)
-  );
-
-  if (compatible.length === 0) {
+  if (tattooProfiles.length === 0) {
     return [];
   }
 
   return Math.random() < 0.04
     ? pickDistinctWeightedIds(
-      compatible.map(profile => ({ id: profile.id, weight: profile.weight })),
+      tattooProfiles.map(profile => ({ id: profile.id, weight: profile.weight })),
       1
     )
     : [];
@@ -317,11 +340,8 @@ function getEyewear(ageGroup: string): string {
   return pickWeighted(compatible).id;
 }
 
-function getJewelry(gender: GeneratedPerson["gender_presentation"]): string[] {
-  const compatible = jewelryProfiles.filter(profile =>
-    isPresentationCompatible(profile.compatiblePresentations, gender)
-  );
-  const pick = pickWeighted(compatible).id;
+function getJewelry(): string[] {
+  const pick = pickWeighted(jewelryProfiles).id;
 
   return pick === "no_visible_jewelry" ? [] : [pick];
 }
@@ -405,9 +425,9 @@ function resolveHairPresentation(
   const eyebrowStyle = pickFromWeightedMap(eyebrowStyles);
   const facialHair = getFacialHair(ageGroup, gender);
   const eyewear = getEyewear(ageGroup);
-  const jewelry = getJewelry(gender);
-  const piercings = getPiercings(ageGroup, gender);
-  const tattoos = getTattoos(ageGroup, gender);
+  const jewelry = getJewelry();
+  const piercings = getPiercings(ageGroup);
+  const tattoos = getTattoos(ageGroup);
   const visibleScars = getVisibleScars();
   const culturalStyling = getCulturalStyling(region.id, gender);
   const distinctiveFeatures = getDistinctiveFeatures(ageGroup);
@@ -529,9 +549,7 @@ function applyBatchTattooRate(persons: GeneratedPerson[]): GeneratedPerson[] {
     eligibleIndexes.map(({ person, index }) => ({
       index,
       tattoo: pickDistinctWeightedIds(
-        tattooProfiles
-          .filter(profile => isPresentationCompatible(profile.compatiblePresentations, person.gender_presentation))
-          .map(profile => ({ id: profile.id, weight: profile.weight })),
+        tattooProfiles.map(profile => ({ id: profile.id, weight: profile.weight })),
         1
       )
     }))
@@ -621,18 +639,12 @@ function agingForAge(ageGroup: string) {
   }
 }
 
-function getFacialAsymmetry(ageGroup: string): string {
-  return pickFromWeightedMap(
-    facialAsymmetryProfiles[ageGroup as keyof typeof facialAsymmetryProfiles]
-      ?? facialAsymmetryProfiles.adult
-  );
+function getFacialAsymmetry(): string {
+  return pickFromWeightedMap(facialAsymmetryWeights);
 }
 
-function getExpression(ageGroup: string): string {
-  return pickFromWeightedMap(
-    expressionProfiles[ageGroup as keyof typeof expressionProfiles]
-      ?? expressionProfiles.adult
-  );
+function getExpression(): string {
+  return pickFromWeightedMap(expressionWeights);
 }
 
 function generateVisual(
@@ -643,7 +655,6 @@ function generateVisual(
 ): VisualProfile {
   const aging = agingForAge(ageGroup);
   const eyeColor = pickFromWeightedMap(region.eyeColorWeights);
-  const eyeShape = pickFromWeightedMap(eyeShapes);
   const noseSize = pickFromWeightedMap(region.noseSizeWeights);
   const hairPresentation = resolveHairPresentation(region, ageGroup, gender);
 
@@ -671,17 +682,48 @@ function generateVisual(
     cultural_styling: hairPresentation.cultural_styling,
     distinctive_features: hairPresentation.distinctive_features,
     eye_color: normalizeEyeColor(eyeColor),
-    eye_shape: eyeShape === "round" ? "round_eyes" : eyeShape,
-    facial_asymmetry: getFacialAsymmetry(ageGroup),
-    expression: getExpression(ageGroup),
+    eye_shape: pickFromWeightedMap(eyeShapes),
+    eye_size: pickFromWeightedMap(eyeSizes),
+    eye_spacing: pickFromWeightedMap(eyeSpacing),
+    canthal_tilt: pickFromWeightedMap(canthalTilts),
+    under_eye_detail: pickFromWeightedMap(underEyeDetails),
+    facial_asymmetry: getFacialAsymmetry(),
+    expression: getExpression(),
+    presence_vibe: pickFromWeightedMap(presenceVibes),
+    gaze_intensity: pickFromWeightedMap(gazeIntensity),
+    mouth_expression_detail: pickFromWeightedMap(mouthExpressionDetails),
+    brow_expression_detail: pickFromWeightedMap(browExpressionDetails),
+    portrait_framing: pickFromWeightedMap(portraitFraming),
+    casting_style: pickFromWeightedMap(castingStyles),
     gaze_direction: pickFromWeightedMap(gazeDirectionWeights),
     head_pose: pickFromWeightedMap(headPoseWeights),
     eyelid_type: pickFromWeightedMap(region.eyelidTypeWeights),
+    eyebrow_density: pickFromWeightedMap(eyebrowDensity),
+    eyebrow_position: pickFromWeightedMap(eyebrowPosition),
+    brow_ridge_prominence: pickFromWeightedMap(browRidgeProminence),
     nose_size: normalizeNoseSize(noseSize),
     nose_profile: pickFromWeightedMap(region.noseProfileWeights),
+    nose_length: pickFromWeightedMap(noseLengths),
+    nose_bridge_width: pickFromWeightedMap(noseBridgeWidths),
+    nose_tip_shape: pickFromWeightedMap(noseTipShapes),
+    nostril_width: pickFromWeightedMap(nostrilWidths),
+    nostril_visibility: pickFromWeightedMap(nostrilVisibility),
     lip_fullness: pickFromWeightedMap(region.lipFullnessWeights),
+    mouth_width: pickFromWeightedMap(mouthWidths),
+    mouth_shape: pickFromWeightedMap(mouthShapes),
+    cupid_bow_definition: pickFromWeightedMap(cupidBowDefinition),
+    philtrum_length: pickFromWeightedMap(philtrumLengths),
+    facial_fullness: pickFromWeightedMap(facialFullness),
+    visible_body_build: pickFromWeightedMap(visibleBodyBuild),
     cheek_fullness: pickFromWeightedMap(cheekFullness),
+    cheekbone_height: pickFromWeightedMap(cheekboneHeights),
+    cheekbone_prominence: pickFromWeightedMap(cheekboneProminence),
     jaw_shape: pickFromWeightedMap(jawShapes),
+    chin_shape: pickFromWeightedMap(chinShapes),
+    forehead_height: pickFromWeightedMap(foreheadHeights),
+    neck_width: pickFromWeightedMap(neckWidths),
+    shoulder_frame: pickFromWeightedMap(shoulderFrames),
+    freckle_pattern: pickFromWeightedMap(frecklePatterns),
     wrinkle_level: aging.wrinkle_level,
     crow_feet: aging.crow_feet,
     nasolabial_folds: aging.nasolabial_folds,

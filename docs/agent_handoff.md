@@ -2,283 +2,198 @@
 
 Dit document is bedoeld voor een nieuwe AI agent die dit project overneemt.
 
-## Doel van de app
+## Productdoel
 
-Deze app is geen generieke random-person generator, maar een `prompt-first casting headshot generator`.
+Deze app is een lokaal prototype voor een latere online character/casting database.
 
-De output moet:
+De app begon als een prompt-first casting headshot generator, maar de richting is nu breder:
 
-- bestuurbaar zijn via filters in de linker kolom
-- voldoende visuele variatie geven voor grote batches
-- bruikbaar zijn als image-generation prompt
-- realistisch ogen, dus niet te perfect, niet te generiek, en niet te stereotype
+1. synthetische characters genereren
+2. visuele morphology keys opslaan
+3. prompts en negative prompts bouwen
+4. rendered images koppelen aan de exacte keys waarmee ze gemaakt zijn
+5. bestaande images later via een visual-language task omzetten naar dezelfde canonical keys
+6. characters browsen/filteren
+7. vanuit een bestaand character controlled variants genereren met slight deviation
 
-De kern van het product is:
+Het einddoel is niet alleen een promptlijst, maar een herbruikbare character library.
 
-1. een synthetisch persoon genereren
-2. daar een fotorealistische headshot prompt van bouwen
-3. ook een negative prompt meegeven
-4. in batchmodus veel prompts genereren die niet allemaal op elkaar lijken
+## Belangrijkste Concepten
 
-## Belangrijkste bestanden
+### Generated character
 
-- [src/App.tsx](/Users/stefanrademakers/Mediavibe/ai-casting-headshot-generator/src/App.tsx:1)
-  De UI, filters, single generation, batch generation en copy flow.
-- [src/lib/generator.ts](/Users/stefanrademakers/Mediavibe/ai-casting-headshot-generator/src/lib/generator.ts:1)
-  De hoofdgenerator. Hier wordt bijna alle selectie- en batchlogica afgehandeld.
-- [src/lib/promptBuilder.ts](/Users/stefanrademakers/Mediavibe/ai-casting-headshot-generator/src/lib/promptBuilder.ts:1)
-  Zet een `GeneratedPerson` om in een image-generation prompt en negative prompt.
-- [src/lib/phrases.ts](/Users/stefanrademakers/Mediavibe/ai-casting-headshot-generator/src/lib/phrases.ts:1)
-  Mapping van interne ids naar leesbare prompttaal.
-- [src/data/options.ts](/Users/stefanrademakers/Mediavibe/ai-casting-headshot-generator/src/data/options.ts:1)
-  Vrijwel alle niet-regio-specifieke datasets en gewichten.
-- [src/data/regions.ts](/Users/stefanrademakers/Mediavibe/ai-casting-headshot-generator/src/data/regions.ts:1)
-  De regio-profielen met weighted visual maps.
-- [src/types.ts](/Users/stefanrademakers/Mediavibe/ai-casting-headshot-generator/src/types.ts:1)
-  Type-definities voor het hele datamodel.
-- [src/main.tsx](/Users/stefanrademakers/Mediavibe/ai-casting-headshot-generator/src/main.tsx:1)
-  App bootstrapping plus een simpele error boundary tegen volledig zwart scherm.
+Een volledig gegenereerd `GeneratedPerson` record met identity/context, `visual` keys, prompt, negative prompt en later image assets.
 
-## Hoe de app werkt
+### Extracted morphology
 
-### 1. UI flow
+Een toekomstige import-output van een visual-language model:
 
-De gebruiker kiest links:
+- JSON only
+- `schema_version`
+- image quality metadata
+- per field `{ value, confidence }`
+- `unknown` voor velden die niet zichtbaar genoeg zijn
+- uncertainty notes
 
-- `region profile`
-- `age group`
-- `gender presentation`
-- `campaign type`
+Deze output moet later geparsed, gevalideerd, genormaliseerd en opgeslagen worden.
 
-Daarna zijn er twee paden:
+### Canonical visual keys
 
-- `Generate person`
-  Genereert exact één persoon en toont profiel + prompt + negative prompt.
-- `Generate person list`
-  Genereert `100`, `500` of `1000` prompts en zet die als één-regel-prompts in een textarea en op het clipboard.
+De centrale taxonomie van alle visuele velden. Generator, field data view, VL system prompt, parser, filters en promptbuilder moeten uiteindelijk uit dezelfde registry gevoed worden.
 
-### 2. Single generation
+Dit bestaat nog niet als aparte registry. Nu zitten de waarden verspreid over:
 
-`App.tsx` roept `generatePerson()` aan uit `generator.ts`.
+- `src/data/options.ts`
+- `src/data/regions.ts`
+- `src/lib/phrases.ts`
+- `src/types.ts`
+- `src/App.tsx` field-data registry
 
-Globale flow:
+Een belangrijke volgende stap is dit centraliseren.
 
-1. regio wordt resolved
-2. age group wordt resolved
-3. gender presentation wordt resolved
-4. visuele kenmerken worden gesampled
-5. identity/casting metadata wordt toegevoegd
-6. `promptBuilder.ts` maakt de headshot prompt
+## Belangrijkste Bestanden
 
-### 3. Region logic
+- `src/App.tsx`
+  UI, filters, single generation, batch generation, copy flow en `Field data` view.
+- `src/lib/generator.ts`
+  Hoofdgenerator en weighted sampling.
+- `src/lib/promptBuilder.ts`
+  Zet `GeneratedPerson` om naar prompt en negative prompt.
+- `src/lib/phrases.ts`
+  Interne keys naar prompttaal. Nog fragiel omdat het een grote gedeelde map is.
+- `src/data/options.ts`
+  Niet-regio-specifieke data/gewichten, inclusief veel morphology assen.
+- `src/data/regions.ts`
+  Region-weighted visual maps.
+- `src/types.ts`
+  Shared datamodel.
 
-Er zijn twee hoofdmodi:
+## Huidige UI
 
-- expliciete regio
-  Dan wordt het gekozen regio-profiel gebruikt uit `regions.ts`
-- `Random global`
-  Dit gebruikt niet zomaar een random regio, maar een neutralere samengestelde mix
+De gebruiker kan nu:
 
-Dat is bewust gedaan om full-random minder scheef en minder bias-heavy te maken.
+- `region profile` kiezen
+- `age group` kiezen
+- `gender presentation` kiezen
+- `campaign type` kiezen
+- een single person genereren
+- een batch prompt list genereren
+- generated JSON/prompt kopieren
+- via `Field data` alle velden en mogelijke waarden inspecteren
 
-### 4. Visual profile
+## Toekomstige Views
 
-De `visual` sectie in `GeneratedPerson` bevat inmiddels veel meer dan alleen basismorfologie.
+### Character browser
 
-Belangrijke groepen:
+Moet later prerendered characters tonen met hun gekoppelde image(s) en generation/import keys.
 
-- basisvormen
-  `face_shape`, `head_shape`, `jaw_shape`, `nose_profile`, `nose_size`
-- huid en veroudering
-  `skin_tone`, `skin_undertone`, `skin_texture`, `wrinkle_level`, `crow_feet`, `nasolabial_folds`, `pore_visibility`
-- ogen en brows
-  `eye_color`, `eye_shape`, `eyelid_type`, `eyebrow_style`
-- haar
-  `hair_color`, `hair_type`, `hair_length`, `hairstyle`, `hairline`, `hair_parting`, `hair_finish`
-- grooming en accessories
-  `facial_hair`, `eyewear`, `piercings`, `jewelry`, `tattoos`
-- realism details
-  `visible_scars`, `distinctive_features`, `facial_asymmetry`
-- styling / portrait behavior
-  `cultural_styling`, `expression`, `gaze_direction`, `head_pose`
+Benodigde filters:
 
-### 5. Prompt building
+- age group
+- gender presentation
+- campaign type
+- region profile
+- face shape
+- head shape
+- eye shape / color
+- nose / mouth / brow keys
+- hair style / hair color / hairline
+- facial fullness / visible body build
+- freckles / scars / tattoos / eyewear
+- source: generated/imported/manual
 
-`buildHeadshotPrompt()` neemt die hele `GeneratedPerson` en bouwt daar één lange natuurlijke prompt van.
+### Character detail
 
-Belangrijke eigenschap:
+Moet later tonen:
 
-- de prompt is bedoeld voor image generation
-- dus niet alleen data dumpen, maar visueel leesbare taal gebruiken
-- dingen zoals hair, pose, realism details en styling worden expliciet uitgeschreven
+- linked rendered images
+- canonical visual keys
+- extraction confidence per field
+- prompt en negative prompt
+- raw extraction JSON indien imported
+- variant history
+- actions zoals `generate slight variation`, `copy prompt`, `rerender`, `edit keys`
 
-### 6. Batch generation
+### Visual extraction/import
 
-`generatePersonBatch()` heeft twee modi:
+Moet later:
 
-- gewone batch
-  Als de gebruiker iets gefilterd heeft, respecteert de batchgenerator die filters gewoon en maakt hij herhaald single generations.
-- balanced full-random batch
-  Alleen wanneer `region`, `age group` en `gender presentation` alle drie op `random` staan
+1. een image accepteren
+2. de VL system prompt genereren uit canonical schema
+3. JSON output ontvangen
+4. parse/validate/normalize uitvoeren
+5. een `CharacterRecord` aanmaken of bijwerken
 
-Die balanced full-random batch gebruikt decks en neutralere distributies om te voorkomen dat 100 prompts bijna dezelfde familie worden.
+## Belangrijke Regels
 
-## Hoe ik het heb aangepakt
+- Region/culture beinvloedt kansen, nooit harde stereotypes.
+- Demografische velden mogen niet automatisch traits sturen waar geen goede visuele/logische reden voor is.
+- Expressions, pose, jewelry, piercings en tattoos moeten niet primair door leeftijd/gender/regio gestuurd worden.
+- Age mag aging sturen.
+- Age/gender mag hairline/kaalheid en hairstyle compatibility sturen.
+- Region mag broad visual probability maps sturen.
+- Voor imported images: liever `unknown` dan gokken.
+- Elke imported field moet confidence kunnen dragen.
+- Images moeten gekoppeld blijven aan de keys waarmee ze gegenereerd of geimporteerd zijn.
+- Variants moeten parent/lineage bewaren.
 
-De aanpak was niet: “meer random maken”.
+## Huidige Visual Scope
 
-De aanpak was:
+De `visual` sectie is inmiddels breed:
 
-1. eerst de generator inhoudelijk lezen
-2. begrijpen waar te weinig variatie vandaan kwam
-3. daarna echte visuele assen toevoegen die een beeldmodel ook begrijpt
+- face/head: `face_shape`, `head_shape`, `forehead_height`
+- eyes/brows: `eye_color`, `eye_shape`, `eye_size`, `eye_spacing`, `canthal_tilt`, `under_eye_detail`, `eyelid_type`, `eyebrow_style`, `eyebrow_density`, `eyebrow_position`, `brow_ridge_prominence`
+- nose/mouth: `nose_size`, `nose_length`, `nose_profile`, `nose_bridge_width`, `nose_tip_shape`, `nostril_width`, `nostril_visibility`, `mouth_width`, `mouth_shape`, `lip_fullness`, `cupid_bow_definition`, `philtrum_length`
+- facial structure: `facial_fullness`, `visible_body_build`, `cheek_fullness`, `cheekbone_height`, `cheekbone_prominence`, `jaw_shape`, `chin_shape`, `neck_width`, `shoulder_frame`
+- skin/aging: `skin_tone`, `skin_undertone`, `skin_texture`, `wrinkle_level`, `crow_feet`, `nasolabial_folds`, `pore_visibility`
+- marks/details: `freckle_pattern`, `visible_scars`, `distinctive_features`, `tattoos`, `piercings`, `jewelry`, `eyewear`
+- hair/grooming: `hair_color`, `hair_type`, `hair_length`, `hairstyle`, `hairstyle_presentation`, `hair_parting`, `hair_finish`, `hairline`, `facial_hair`
+- expression/pose: `expression`, `gaze_direction`, `head_pose`
 
-Belangrijke beslissingen:
+## Bekende Risico's
 
-- `Random global` neutraler gemaakt
-  Anders bleef full-random te donker/te bruin en te region-biased.
-- batch balancing toegevoegd
-  Niet overal, alleen voor full-random batches, zodat de linker kolom altijd leidend blijft.
-- haar opgesplitst in meerdere dimensies
-  Niet alleen `hair_type` en `hair_length`, maar ook `hairstyle`, `hairline`, `hair_parting`, `hair_finish`.
-- promptability als criterium gebruikt
-  Alleen dingen toevoegen die in een headshot zichtbaar zijn en die een image model echt kan interpreteren.
-- niet-perfecte mensen expliciet gemaakt
-  Asymmetrie, littekens, tattoos, lichte expressie- en poseverschillen.
+### `phrases.ts`
 
-## Variatieverbeteringen die al zijn gedaan
+Nog steeds een groot gedeeld object. Dit is fragiel door key-collisions zoals `medium`, `long`, `full`, `dark_brown`.
 
-De grote variatieverbeteringen staan ook apart in [docs/updates.md](/Users/stefanrademakers/Mediavibe/ai-casting-headshot-generator/docs/updates.md:1), maar inhoudelijk kwamen ze neer op:
+Gewenste richting:
 
-- neutralere full-random regio-aanpak
-- balanced batch generation
-- veel rijkere hair system
-- baldness / hairline realism
-- piercings, tattoos, jewelry, eyewear
-- scars, asymmetry, distinctive features
-- cultural styling cues
-- lichte expression / gaze / head pose variatie
+- domeinspecifieke phrase maps
+- of een canonical field registry met prompt labels per value
 
-## Dingen waar expliciet op gelet is
+### Alias normalisatie
 
-### Linker kolom moet altijd gerespecteerd worden
+Oude/import schemas kunnen waarden bevatten zoals:
 
-Dat was een harde eis van de gebruiker.
+- `almond`
+- `round`
+- `medium`
+- `none_visible`
 
-Dus:
+Terwijl de app canonical keys gebruikt of gaat gebruiken zoals:
 
-- kiest de gebruiker `Western Europe`, dan moet de batch dat volgen
-- kiest de gebruiker `male_presenting`, dan moeten hairstyle constraints dat volgen
-- kiest de gebruiker alles random, dan mag je extra batch balancing inzetten
+- `almond_eyes`
+- `round_eyes`
+- `medium_size`
+- lege arrays voor geen zichtbare details
 
-### Niet alles is wenselijk voor headshots
+Er moet later een import-normalizer komen.
 
-Veel variatie-ideeën klinken goed, maar zijn niet zichtbaar of niet bruikbaar in een close portrait.
+### Prompt lengte
 
-Daarom zijn vooral toegevoegd:
+De visual schema wordt steeds rijker. Niet elk descriptorveld moet altijd in de final prompt. De promptbuilder moet uiteindelijk slim selecteren welke details relevant zijn.
 
-- neck / collarbone tattoos
-- visible jewelry
-- visible eyewear
-- subtle scars near face
-- styling cues rond hoofd, nek en schouders
+### Buildstatus
 
-En dus niet allerlei lichaamsdetails die in een headshot toch niet zichtbaar zijn.
+Gebruik `npx vite build` als snelle sanity check. `npm run build` kan nog falen door bestaande TypeScript setup issues.
 
-### Prompt leesbaarheid is belangrijk
+## Aanbevolen Volgende Stappen
 
-Meer velden toevoegen is niet genoeg.
-
-Als de prompt een onleesbare dump wordt:
-
-- begrijpt een model hem slechter
-- krijg je minder consistente visuele output
-
-Daarom is de promptbuilder opgebouwd in korte semantische blokken:
-
-- identity
-- facial identity
-- aging and realism
-- pose and expression
-- hair
-- accessories and adornment
-- styling / realism cues
-- photography
-
-## Bekende valkuilen
-
-### 1. `phrases.ts` is nog een risicozone
-
-De huidige `phraseMap` is een enkel groot object.
-
-Dat werkt, maar is fragiel omdat verschillende domeinen key names delen, zoals eerder met `medium`, `long`, `red`, `dark_brown`.
-
-Dat zou op termijn beter opgesplitst moeten worden in domeinspecifieke maps.
-
-### 2. `display_name` en `model_code`
-
-In `buildPerson()` wordt `makeCode()` nog twee keer aangeroepen, waardoor `display_name` en `model_code` kunnen divergeren.
-
-Dat is een bekende dataconsistentie-bug.
-
-### 3. Variatie is beter, maar nog niet volledig archetype-based
-
-Veel features worden nog steeds onafhankelijk gesampled.
-
-Dat betekent:
-
-- de set is al veel beter
-- maar je kunt nog steeds “dezelfde soort persoon met andere toggles” voelen
-
-De volgende grote stap zou zijn:
-
-- complete `look archetypes`
-- dus samengestelde combinaties van haar + grooming + styling + realism cues + expression
-
-### 4. Buildstatus
-
-`npx vite build` werkt en is de snelste sanity check.
-
-Historisch gezien was `npm run build` niet altijd groen door projectissues buiten de variatiewijzigingen.
-
-Als je verder gaat werken, check beide buildpaden opnieuw.
-
-## Aanbevolen werkwijze voor de volgende agent
-
-Als je dit project uitbreidt:
-
-1. begin in `src/lib/generator.ts`
-2. check of een nieuw veld echt zichtbaar is in een headshot
-3. voeg pas daarna data toe in `options.ts`
-4. voeg daarna prompttaal toe in `phrases.ts` en `promptBuilder.ts`
-5. verifieer daarna met `npx vite build`
-
-Bij elke nieuwe variatievraag moet je jezelf afvragen:
-
-- is dit visueel zichtbaar in een headshot?
-- is dit begrijpelijk voor een image model?
-- vergroot dit echte identiteit/silhouet-variatie, of alleen metadata?
-- breekt dit de linker kolom filters niet?
-
-## Goede volgende stappen
-
-De beste vervolgstappen zijn waarschijnlijk:
-
-- `look archetypes` toevoegen in plaats van alleen losse attributes
-- `phrases.ts` opschonen in domeinspecifieke phrase maps
-- eventueel een expliciete toggle tussen
-  - `balanced random`
-  - `region-weighted random`
-  - `realism-first random`
-
-## Snelle sanity checks
-
-Als je snel wilt zien of de app nog logisch werkt:
-
-1. open de app
-2. genereer een single person
-3. check of profiel, prompt en negative prompt zichtbaar zijn
-4. genereer een batch van `100`
-5. check of de lijst op één regel per prompt staat
-6. check of filters in de linker kolom correct gerespecteerd worden
-7. check of full-random batches niet allemaal op elkaar lijken
+1. Maak `src/schema/visualFields.ts` als canonical registry.
+2. Laat `Field data` uit die registry renderen.
+3. Genereer de visual-language system prompt uit die registry.
+4. Bouw een parser/validator/normalizer voor pasted extraction JSON.
+5. Maak een simpele import-preview view: plak JSON, zie normalized visual profile.
+6. Split `phrases.ts` of koppel prompt labels aan de registry.
+7. Ontwerp `CharacterRecord`, `CharacterImage` en variant lineage types.
+8. Bouw later de character browser/filter view.

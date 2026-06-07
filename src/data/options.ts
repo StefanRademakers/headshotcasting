@@ -628,9 +628,9 @@ export const eyewearProfiles: Array<{
   compatibleAges?: AgeGroup[];
 }> = [
   { id: "no_eyewear", weight: 0.70 },
-  { id: "thin_metal_round_glasses", weight: 0.06, compatibleAges: ["teen", "young_adult", "adult", "middle_aged", "senior", "elderly"] },
-  { id: "soft_rectangular_acetate_glasses", weight: 0.07, compatibleAges: ["teen", "young_adult", "adult", "middle_aged", "senior", "elderly"] },
-  { id: "clear_frame_glasses", weight: 0.04, compatibleAges: ["teen", "young_adult", "adult"] },
+  { id: "thin_metal_round_glasses", weight: 0.06, compatibleAges: ["child", "teen", "young_adult", "adult", "middle_aged", "senior", "elderly"] },
+  { id: "soft_rectangular_acetate_glasses", weight: 0.07, compatibleAges: ["child", "teen", "young_adult", "adult", "middle_aged", "senior", "elderly"] },
+  { id: "clear_frame_glasses", weight: 0.04, compatibleAges: ["child", "teen", "young_adult", "adult"] },
   { id: "wireframe_oval_glasses", weight: 0.04, compatibleAges: ["adult", "middle_aged", "senior", "elderly"] },
   { id: "subtle_cat_eye_glasses", weight: 0.03, compatibleAges: ["young_adult", "adult", "middle_aged"] },
   { id: "simple_reading_glasses", weight: 0.04, compatibleAges: ["middle_aged", "senior", "elderly"] },
@@ -718,123 +718,135 @@ export const culturalStylingProfiles: Array<{
 ];
 
 export const eyeShapes = {
-  almond: 0.34,
-  round: 0.20,
-  narrow: 0.12,
-  deep_set: 0.13,
-  wide_open: 0.09,
-  sleepy: 0.06,
-  sharp: 0.06
+  almond_eyes: 0.34,
+  round_eyes: 0.20,
+  narrow_eyes: 0.12,
+  deep_set_eyes: 0.13,
+  wide_open_eyes: 0.09,
+  sleepy_eyes: 0.06,
+  sharp_eyes: 0.06
 };
 
-export const facialAsymmetryProfiles = {
-  child: {
-    nearly_symmetrical_with_minor_variation: 0.58,
-    subtle_left_right_facial_asymmetry: 0.18,
-    slight_brow_height_asymmetry: 0.10,
-    slight_eye_opening_asymmetry: 0.08,
-    slight_mouth_corner_asymmetry: 0.06
-  },
-  teen: {
-    nearly_symmetrical_with_minor_variation: 0.48,
-    subtle_left_right_facial_asymmetry: 0.22,
-    slight_brow_height_asymmetry: 0.12,
-    slight_eye_opening_asymmetry: 0.10,
-    slight_mouth_corner_asymmetry: 0.08
-  },
-  young_adult: {
-    nearly_symmetrical_with_minor_variation: 0.38,
-    subtle_left_right_facial_asymmetry: 0.26,
-    slight_brow_height_asymmetry: 0.14,
-    slight_eye_opening_asymmetry: 0.12,
-    slight_mouth_corner_asymmetry: 0.10
-  },
-  adult: {
-    nearly_symmetrical_with_minor_variation: 0.32,
-    subtle_left_right_facial_asymmetry: 0.28,
-    slight_brow_height_asymmetry: 0.14,
-    slight_eye_opening_asymmetry: 0.12,
-    slight_mouth_corner_asymmetry: 0.14
-  },
-  middle_aged: {
-    nearly_symmetrical_with_minor_variation: 0.24,
-    subtle_left_right_facial_asymmetry: 0.32,
-    slight_brow_height_asymmetry: 0.14,
-    slight_eye_opening_asymmetry: 0.12,
-    slight_mouth_corner_asymmetry: 0.18
-  },
-  senior: {
-    nearly_symmetrical_with_minor_variation: 0.18,
-    subtle_left_right_facial_asymmetry: 0.34,
-    slight_brow_height_asymmetry: 0.14,
-    slight_eye_opening_asymmetry: 0.12,
-    slight_mouth_corner_asymmetry: 0.22
-  },
-  elderly: {
-    nearly_symmetrical_with_minor_variation: 0.14,
-    subtle_left_right_facial_asymmetry: 0.34,
-    slight_brow_height_asymmetry: 0.14,
-    slight_eye_opening_asymmetry: 0.12,
-    slight_mouth_corner_asymmetry: 0.26
-  }
+export const eyeSizes = {
+  small_eyes: 0.14,
+  medium_eyes: 0.58,
+  large_eyes: 0.22,
+  very_large_eyes: 0.06
 };
 
-export const expressionProfiles = {
-  child: {
-    soft_open_expression: 0.22,
-    relaxed_neutral_expression: 0.20,
-    faint_closed_mouth_smile: 0.32,
-    curious_attentive_expression: 0.18,
-    thoughtful_quiet_expression: 0.08
-  },
-  teen: {
-    relaxed_neutral_expression: 0.24,
-    faint_closed_mouth_smile: 0.24,
-    thoughtful_quiet_expression: 0.18,
-    curious_attentive_expression: 0.12,
-    subtle_half_smile: 0.14,
-    composed_serious_expression: 0.08
-  },
-  young_adult: {
-    relaxed_neutral_expression: 0.26,
-    subtle_half_smile: 0.18,
-    thoughtful_quiet_expression: 0.18,
-    faint_closed_mouth_smile: 0.14,
-    composed_serious_expression: 0.14,
-    soft_open_expression: 0.10
-  },
-  adult: {
-    relaxed_neutral_expression: 0.28,
-    subtle_half_smile: 0.16,
-    thoughtful_quiet_expression: 0.18,
-    composed_serious_expression: 0.16,
-    faint_closed_mouth_smile: 0.12,
-    soft_open_expression: 0.10
-  },
-  middle_aged: {
-    relaxed_neutral_expression: 0.30,
-    subtle_half_smile: 0.18,
-    thoughtful_quiet_expression: 0.18,
-    composed_serious_expression: 0.18,
-    faint_closed_mouth_smile: 0.10,
-    soft_open_expression: 0.06
-  },
-  senior: {
-    relaxed_neutral_expression: 0.28,
-    subtle_half_smile: 0.22,
-    thoughtful_quiet_expression: 0.20,
-    composed_serious_expression: 0.18,
-    faint_closed_mouth_smile: 0.08,
-    soft_open_expression: 0.04
-  },
-  elderly: {
-    relaxed_neutral_expression: 0.26,
-    subtle_half_smile: 0.22,
-    thoughtful_quiet_expression: 0.22,
-    composed_serious_expression: 0.18,
-    faint_closed_mouth_smile: 0.08,
-    soft_open_expression: 0.04
-  }
+export const eyeSpacing = {
+  close_set_eyes: 0.12,
+  balanced_eye_spacing: 0.68,
+  wide_set_eyes: 0.20
+};
+
+export const canthalTilts = {
+  neutral_canthal_tilt: 0.54,
+  slight_positive_canthal_tilt: 0.24,
+  slight_negative_canthal_tilt: 0.12,
+  level_outer_eye_corners: 0.10
+};
+
+export const underEyeDetails = {
+  smooth_under_eye_area: 0.30,
+  slight_under_eye_hollows: 0.22,
+  soft_under_eye_fullness: 0.18,
+  faint_under_eye_shadows: 0.18,
+  visible_tear_troughs: 0.08,
+  mild_under_eye_lines: 0.04
+};
+
+export const eyebrowDensity = {
+  sparse_brows: 0.08,
+  medium_density_brows: 0.42,
+  full_brows: 0.34,
+  very_full_brows: 0.16
+};
+
+export const eyebrowPosition = {
+  low_set_brows: 0.20,
+  balanced_brow_position: 0.58,
+  high_set_brows: 0.14,
+  slightly_uneven_brow_position: 0.08
+};
+
+export const browRidgeProminence = {
+  soft_brow_ridge: 0.34,
+  subtle_brow_ridge: 0.36,
+  defined_brow_ridge: 0.20,
+  prominent_brow_ridge: 0.10
+};
+
+export const facialAsymmetryWeights = {
+  nearly_symmetrical_with_minor_variation: 0.34,
+  subtle_left_right_facial_asymmetry: 0.28,
+  slight_brow_height_asymmetry: 0.14,
+  slight_eye_opening_asymmetry: 0.12,
+  slight_mouth_corner_asymmetry: 0.12
+};
+
+export const expressionWeights = {
+  relaxed_neutral_expression: 0.27,
+  faint_closed_mouth_smile: 0.18,
+  subtle_half_smile: 0.17,
+  thoughtful_quiet_expression: 0.16,
+  composed_serious_expression: 0.12,
+  soft_open_expression: 0.06,
+  curious_attentive_expression: 0.04
+};
+
+export const presenceVibes = {
+  natural_everyday_presence: 0.26,
+  soft_approachable_presence: 0.20,
+  calm_confident_presence: 0.18,
+  quiet_intense_presence: 0.12,
+  cool_detached_presence: 0.10,
+  editorial_composed_presence: 0.08,
+  raw_street_casting_presence: 0.06
+};
+
+export const gazeIntensity = {
+  soft_gaze_intensity: 0.22,
+  neutral_gaze_intensity: 0.34,
+  focused_gaze_intensity: 0.24,
+  intense_gaze_intensity: 0.12,
+  distant_gaze_intensity: 0.08
+};
+
+export const mouthExpressionDetails = {
+  relaxed_closed_mouth: 0.30,
+  neutral_closed_lips: 0.28,
+  firm_closed_lips: 0.16,
+  slightly_pursed_lips: 0.10,
+  soft_hint_of_smile: 0.12,
+  parted_relaxed_lips: 0.04
+};
+
+export const browExpressionDetails = {
+  relaxed_brow_expression: 0.42,
+  subtle_brow_focus: 0.24,
+  slight_brow_furrow: 0.14,
+  lifted_attentive_brows: 0.10,
+  asymmetric_brow_interest: 0.06,
+  intense_brow_tension: 0.04
+};
+
+export const portraitFraming = {
+  tight_headshot_framing: 0.24,
+  head_and_shoulders_framing: 0.36,
+  medium_close_up_framing: 0.24,
+  close_cropped_face_framing: 0.08,
+  relaxed_portrait_crop: 0.08
+};
+
+export const castingStyles = {
+  clean_commercial_casting: 0.28,
+  natural_lifestyle_casting: 0.22,
+  raw_editorial_casting: 0.14,
+  cool_fashion_casting: 0.12,
+  office_professional_casting: 0.12,
+  character_extra_casting: 0.08,
+  premium_minimal_casting: 0.04
 };
 
 export const gazeDirectionWeights = {
@@ -861,6 +873,40 @@ export const cheekFullness = {
   very_full: 0.12
 };
 
+export const cheekboneHeights = {
+  low_cheekbones: 0.12,
+  mid_set_cheekbones: 0.48,
+  high_cheekbones: 0.30,
+  very_high_cheekbones: 0.10
+};
+
+export const cheekboneProminence = {
+  soft_cheekbones: 0.26,
+  subtle_cheekbone_definition: 0.34,
+  defined_cheekbones: 0.26,
+  prominent_cheekbones: 0.14
+};
+
+export const facialFullness = {
+  gaunt_face: 0.03,
+  lean_face: 0.10,
+  slim_face: 0.18,
+  average_facial_fullness: 0.36,
+  softly_full_face: 0.20,
+  full_face: 0.10,
+  very_full_face: 0.03
+};
+
+export const visibleBodyBuild = {
+  slender_visible_build: 0.14,
+  lean_visible_build: 0.16,
+  average_visible_build: 0.38,
+  sturdy_visible_build: 0.14,
+  broad_visible_build: 0.10,
+  heavyset_visible_build: 0.06,
+  very_heavy_visible_build: 0.02
+};
+
 export const jawShapes = {
   soft_jaw: 0.24,
   rounded_jaw: 0.22,
@@ -868,6 +914,113 @@ export const jawShapes = {
   angular_jaw: 0.16,
   narrow_jaw: 0.10,
   broad_jaw: 0.06
+};
+
+export const noseBridgeWidths = {
+  narrow_bridge: 0.18,
+  medium_bridge_width: 0.54,
+  broad_bridge: 0.22,
+  softly_defined_bridge: 0.06
+};
+
+export const noseLengths = {
+  short_nose: 0.14,
+  medium_length_nose: 0.58,
+  long_nose: 0.22,
+  very_long_nose: 0.06
+};
+
+export const noseTipShapes = {
+  rounded_nose_tip: 0.30,
+  softly_defined_nose_tip: 0.32,
+  narrow_nose_tip: 0.12,
+  bulbous_nose_tip: 0.10,
+  slightly_upturned_tip: 0.10,
+  slightly_downturned_tip: 0.06
+};
+
+export const nostrilWidths = {
+  narrow_nostrils: 0.18,
+  medium_nostril_width: 0.56,
+  broad_nostrils: 0.20,
+  flared_nostrils: 0.06
+};
+
+export const nostrilVisibility = {
+  low_nostril_visibility: 0.38,
+  moderate_nostril_visibility: 0.48,
+  visible_nostril_openings: 0.14
+};
+
+export const mouthWidths = {
+  narrow_mouth: 0.16,
+  medium_width_mouth: 0.56,
+  wide_mouth: 0.24,
+  very_wide_mouth: 0.04
+};
+
+export const mouthShapes = {
+  softly_curved_mouth: 0.30,
+  straight_mouth_line: 0.24,
+  bow_shaped_mouth: 0.16,
+  full_rounded_mouth: 0.18,
+  asymmetrical_mouth_shape: 0.08,
+  downturned_resting_mouth: 0.04
+};
+
+export const cupidBowDefinition = {
+  soft_cupid_bow: 0.36,
+  defined_cupid_bow: 0.32,
+  subtle_cupid_bow: 0.22,
+  flat_upper_lip_bow: 0.10
+};
+
+export const philtrumLengths = {
+  short_philtrum: 0.14,
+  average_philtrum: 0.62,
+  long_philtrum: 0.20,
+  very_long_philtrum: 0.04
+};
+
+export const chinShapes = {
+  softly_rounded_chin: 0.30,
+  balanced_chin: 0.34,
+  narrow_chin: 0.12,
+  broad_chin: 0.10,
+  pointed_chin: 0.08,
+  cleft_chin: 0.06
+};
+
+export const foreheadHeights = {
+  low_forehead: 0.12,
+  balanced_forehead: 0.56,
+  high_forehead: 0.24,
+  broad_forehead: 0.08
+};
+
+export const neckWidths = {
+  slender_neck: 0.18,
+  average_neck_width: 0.50,
+  sturdy_neck: 0.18,
+  broad_neck: 0.10,
+  soft_full_neck: 0.04
+};
+
+export const shoulderFrames = {
+  narrow_shoulders: 0.14,
+  average_shoulder_frame: 0.48,
+  gently_sloped_shoulders: 0.16,
+  square_shoulders: 0.12,
+  broad_shoulders: 0.10
+};
+
+export const frecklePatterns = {
+  no_visible_freckles: 0.58,
+  faint_freckles_across_nose: 0.14,
+  light_cheek_freckles: 0.10,
+  sun_touched_freckles: 0.08,
+  scattered_face_freckles: 0.06,
+  dense_freckles_across_face: 0.04
 };
 
 export const professionByCampaign: Record<CampaignType, string[]> = {

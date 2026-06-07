@@ -21,3 +21,18 @@ Wijzigingen in volgorde om de variatie te vergroten:
 17. Nieuwe zichtbare variatie-assen toegevoegd: `eyewear`, `jewelry`, `visible_scars` en `cultural_styling`.
 18. Subtiele `expression`, `gaze_direction` en `head_pose` variatie toegevoegd om portretten minder statisch te maken.
 19. Prompttaal op meerdere plekken aangescherpt zodat een beeldmodel deze variaties ook echt als visuele instructies kan lezen.
+20. `Field data` view toegevoegd zodat alle visual/context fields en hun mogelijke waarden inspecteerbaar zijn.
+21. `expression` en `facial_asymmetry` losgekoppeld van leeftijd, omdat dit anders kunstmatige patronen introduceert.
+22. `jewelry`, `piercings` en `tattoos` minder hard demografisch gestuurd gemaakt.
+23. Kinderbrillen mogelijk gemaakt door eyewear compatibility te corrigeren.
+24. Extra morphology-assen toegevoegd voor ogen, brows, neus, mond, jukbeenderen, kin, voorhoofd, nek, schouders, facial fullness, visible body build en freckles.
+25. `eye_shape` richting explicietere IDs gebracht zoals `almond_eyes`, `round_eyes` en `deep_set_eyes`.
+26. Promptbuilder opgesplitst in duidelijkere blokken zoals eye/brow identity, nose/mouth structure, facial structure en visible build.
+27. Productrichting aangescherpt: dit prototype moet later kunnen doorgroeien naar een online character database met gekoppelde images, filtering, import via VL extraction, en controlled variant generation.
+28. Belangrijke toekomstige architectuur vastgelegd: canonical visual field registry als bron voor generator, `Field data`, VL system prompt, parser/normalizer, filters en prompt output.
+29. `VL prompt` tab toegevoegd die een visual-language system prompt dynamisch opbouwt uit de huidige enum data.
+30. `Import JSON` tab toegevoegd voor het plakken van extraction JSON, alias-normalisatie en conversie naar een prompt-preview.
+31. Import-parser toleranter gemaakt voor VLM edge cases zoals markdown fences, comments, trailing commas, extra tekst rond JSON en afgekapt JSON met ontbrekende closing braces.
+32. Import-flow opgesplitst in `Parse JSON` en `Generate prompt`, met handmatige controls voor age, age group, gender presentation, country/origin metadata en region profile voordat de prompt wordt gebouwd.
+33. `facial_hair` uitgebreid met fijnmazigere snor-, stubble- en beard-varianten zoals `soft_mustache_with_light_stubble`, `defined_mustache_with_stubble`, `patchy_stubble`, `short_full_beard` en `full_beard`.
+34. Compacte `portrait_direction` laag toegevoegd met presence, gaze intensity, mouth/brow expression detail, framing en casting style zodat prompts minder als morphology checklist lezen en meer model presence kunnen sturen.

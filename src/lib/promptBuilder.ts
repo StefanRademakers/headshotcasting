@@ -54,8 +54,12 @@ export function buildHeadshotPrompt(person: GeneratedPerson): string {
 
   return [
     `Photorealistic professional headshot of a ${person.age}-year-old ${person.country_of_origin} ${genderWord}.`,
+    `Portrait direction: ${phrase(v.casting_style)}, ${phrase(v.presence_vibe)}, ${phrase(v.portrait_framing)}, ${phrase(v.gaze_intensity)}, ${phrase(v.mouth_expression_detail)}, and ${phrase(v.brow_expression_detail)}.`,
     `The person has ${phrase(v.skin_tone)} with ${phrase(v.skin_undertone)}, ${phrase(v.skin_texture)}, ${phrase(v.face_shape)}, and ${phrase(v.head_shape)}.`,
-    `Facial identity: ${phrase(v.eye_color)} ${phrase(v.eye_shape)} with ${phrase(v.eyelid_type)}, ${phrase(v.eyebrow_style)}, a ${phrase(v.nose_size)} ${phrase(v.nose_profile)}, ${phrase(v.lip_fullness)}, ${phrase(v.cheek_fullness)}, a ${phrase(v.jaw_shape)}, and ${phrase(v.facial_asymmetry)}.`,
+    `Eye and brow identity: ${phrase(v.eye_color)} ${phrase(v.eye_shape)}, ${phrase(v.eye_size)}, ${phrase(v.eye_spacing)}, ${phrase(v.canthal_tilt)}, with ${phrase(v.eyelid_type)}, ${phrase(v.under_eye_detail)}, ${phrase(v.eyebrow_style)}, ${phrase(v.eyebrow_density)}, ${phrase(v.eyebrow_position)}, and ${phrase(v.brow_ridge_prominence)}.`,
+    `Nose and mouth structure: a ${phrase(v.nose_size)} ${phrase(v.nose_length)} ${phrase(v.nose_profile)} with ${phrase(v.nose_bridge_width)}, ${phrase(v.nose_tip_shape)}, ${phrase(v.nostril_width)}, and ${phrase(v.nostril_visibility)}; ${phrase(v.mouth_width)}, ${phrase(v.mouth_shape)}, ${phrase(v.lip_fullness)}, ${phrase(v.cupid_bow_definition)}, and ${phrase(v.philtrum_length)}.`,
+    `Facial structure: ${phrase(v.facial_fullness)}, ${phrase(v.cheek_fullness)}, ${phrase(v.cheekbone_height)}, ${phrase(v.cheekbone_prominence)}, a ${phrase(v.jaw_shape)}, ${phrase(v.chin_shape)}, ${phrase(v.forehead_height)}, ${phrase(v.freckle_pattern)}, and ${phrase(v.facial_asymmetry)}.`,
+    `Visible build: ${phrase(v.visible_body_build)}, ${phrase(v.neck_width)}, and ${phrase(v.shoulder_frame)} as seen in a close portrait.`,
     `Aging and realism: ${phrase(v.pore_visibility)}, ${phrase(v.wrinkle_level)} wrinkles, ${phrase(v.crow_feet)} crow’s feet, and ${phrase(v.nasolabial_folds)} nasolabial folds.`,
     `Pose and expression: ${phrase(v.expression)}, ${phrase(v.gaze_direction)}, and ${phrase(v.head_pose)}.`,
     hairSentence,
